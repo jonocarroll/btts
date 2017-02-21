@@ -1,0 +1,16 @@
+Package: btts
+Title: We need to go... Back To The Source
+Version: 0.0.0.9000
+Authors@R: person("Jonathan", "Carroll", email = "rpkg@jcarroll.com.au", role = c("aut", "cre"))
+Description: Provides an Rmd macro to insert
+    a HTML popup bar in the help menu linking back to the GitHub page to
+    encourage collaboration, report bugs, etc...
+Depends:
+    R (>= 3.3.0)
+License: GPL (>=3)
+Encoding: UTF-8
+LazyData: TRUE
+BugFixes: http://github.com/jonocarroll/btts
+RoxygenNote: 5.0.1
+URL: https://github.com/jonocarroll/btts
+BugReports: https://github.com/jonocarroll/btts/issues
