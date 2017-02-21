@@ -22,6 +22,11 @@ In theory this can be extended to BitBucket and others too.
 Note that this package is unable to self-document using this method as it would 
 need to unload itself first.
 
+It is advisable to install a package for the first time using 
+`devtools::install_github` so that dependencies are properly met. The 
+additional functionality can then be added by re-installing with
+`btts::install_github`.
+
 ## Motivation
 
 The motivation for this package is similar to that of `pryr::show_c_source` 

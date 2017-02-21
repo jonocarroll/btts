@@ -13,6 +13,11 @@
 #' see exactly how the function was written, rather than the comment-lacking 
 #' body() from within R.
 #' 
+#' It is advisable to install the package for the first time using 
+#' `devtools::install_github` so that dependencies are properly met. The 
+#' additional functionality can then be added by re-installing with
+#' `btts::install_github`.
+#' 
 #' @details Warnings \strong{This function has potential to make damaging 
 #'   changes to your R library, and should not be executed on production or 
 #'   mission-critical setups.} You are invited to carefully scrutinize the 
