@@ -1,6 +1,8 @@
-# btts
+# btts :: We need to go... Back To The Source
 
 ![](man/figures/BTTS.png)
+
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/btts)](https://cran.r-project.org/package=btts)
 
 The goal of `btts` is to create a stronger link between the active user and the 
 source files for a package. Too often I find myself searching through GitHub to 
@@ -62,6 +64,3 @@ Noam Ross created [htmlhelp](https://github.com/noamross/htmlhelp) which I
 adapted into this form. This would not have been possible without his first 
 steps.
 
-```R
-
-```
