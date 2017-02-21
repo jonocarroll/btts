@@ -1,50 +1,50 @@
 #' Install a package with injected HTML in the help file
 #' 
-#' Behaviour is otherwise identical to \code{\link[devtools]{install_github}}
-#' except that some HTML code is carefully inserted in the roxygen2 header.
-#' Processing of the roxygen2 code into a .Rd \code{\link[utils]{help}} file is
-#' also hijacked and HTML sanitisation is deactivated (for that call only). The
+#' Behaviour is otherwise identical to \code{\link[devtools]{install_github}} 
+#' except that some HTML code is carefully inserted in the roxygen2 header. 
+#' Processing of the roxygen2 code into a .Rd \code{\link[utils]{help}} file is 
+#' also hijacked and HTML sanitisation is deactivated (for that call only). The 
 #' injected HTML (static, not user-changeable for now) overlays a pull-up tab at
-#' the bottom of HTML help files (such as viewed in RStudio) with some context
+#' the bottom of HTML help files (such as viewed in RStudio) with some context 
 #' of the GitHub package, such as links to the source, issues page, version, and
 #' author.
 #' 
 #' The code for *that* function is linked to in the GitHub repo, meaning you can
-#' see exactly how the function was written, rather than the comment-lacking
+#' see exactly how the function was written, rather than the comment-lacking 
 #' body() from within R.
 #' 
-#' @details Warnings \strong{This function has potential to make damaging
-#'   changes to your R library, and should not be executed on production or
-#'   mission-critical setups.} You are invited to carefully scrutinize the
+#' @details Warnings \strong{This function has potential to make damaging 
+#'   changes to your R library, and should not be executed on production or 
+#'   mission-critical setups.} You are invited to carefully scrutinize the 
 #'   source code \url{http://github.com/jonocarroll/btts} to ensure that nothing
 #'   malicious is being done here.
 #'   
-#'   Because this function needs to unload the namespace of the package it is
+#'   Because this function needs to unload the namespace of the package it is 
 #'   trying to reinstall, it is a *very* good idea to start with a fresh session
-#'   before using this function. In RStudio, CTRL/CMD + F10 restarts the
+#'   before using this function. In RStudio, CTRL/CMD + F10 restarts the 
 #'   session.
 #'   
-#' @section Limitations: This function is not currently able to install GitHub
-#'   packages that it itself depends on (for now, none, except itself). Doing so
-#'   results in failure to re-load the namespace and that's not good. This of
+#' @section Limitations: This function is not currently able to install GitHub 
+#'   packages that it itself depends on (for now, only gtools and itself). Doing
+#'   so results in failure to re-load the namespace and that's not good. This of
 #'   course means that it can't self-document with the injected HTML.
 #'   
-#'   The full consequences of changing the default parameters has not been
-#'   explored. Most of the code for this function calls devtools functions, but
+#'   The full consequences of changing the default parameters has not been 
+#'   explored. Most of the code for this function calls devtools functions, but 
 #'   there is no guarantee attached to any of it.
 #'   
-#' @section If something goes wrong: If you do find a bug that causes something
-#'   to go wrong, please file an Issue on GitHub. Some steps to try and remedy
-#'   the failure that I've found to work include \itemize{ \item Restarting the
-#'   R session and trying again, \item Manually removing the offending package
+#' @section If something goes wrong: If you do find a bug that causes something 
+#'   to go wrong, please file an Issue on GitHub. Some steps to try and remedy 
+#'   the failure that I've found to work include \itemize{ \item Restarting the 
+#'   R session and trying again, \item Manually removing the offending package 
 #'   with (\code{utils::\link[utils]{remove.packages}}), \item Manually deleting
-#'   the library folder for the offending package, \item Installing the GitHub
-#'   or CRAN version of the package with the standard tools, (i.e.
-#'   \code{utils::\link[utils]{install.packages}} or
+#'   the library folder for the offending package, \item Installing the GitHub 
+#'   or CRAN version of the package with the standard tools, (i.e. 
+#'   \code{utils::\link[utils]{install.packages}} or 
 #'   \code{devtools::\link[devtools]{install_github}}). }
 #'   
-#' @section Acknowledgements: Noam Ross created
-#'   https://github.com/noamross/htmlhelp which I adapted into this form. This
+#' @section Acknowledgements: Noam Ross created 
+#'   https://github.com/noamross/htmlhelp which I adapted into this form. This 
 #'   would not have been possible without his first steps.
 #'   
 #' @inheritParams devtools::install_github
@@ -56,6 +56,7 @@
 #' install_github("jonocarroll/butteRfly")
 #' } 
 #' 
+#' @importFrom gtools getDependencies
 #' @export
 install_github <- function(repo, username = NULL, ref = "master", subdir = NULL, 
                            auth_token = devtools:::github_pat(quiet), host = "api.github.com", 

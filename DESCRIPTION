@@ -7,6 +7,8 @@ Description: Provides an Rmd macro to insert
     encourage collaboration, report bugs, etc...
 Depends:
     R (>= 3.3.0)
+Imports:
+    gtools
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: TRUE
