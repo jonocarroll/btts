@@ -43,7 +43,7 @@ Starting with a fresh session (in RStudio, <kbd>CTRL</kbd>+<kbd>F10</kbd> or
 
 fetches an `R` package source from GitHub (exactly the same as 
 `devtools::install_github("owner/package")` does) then injects some HTML into 
-the Roxygen comments to add the help overlay. It then builds the package as 
+the Roxygen comments to add to the help overlay. It then builds the package as 
 normal.
 
 If a package is available on 
