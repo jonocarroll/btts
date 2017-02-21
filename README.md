@@ -4,7 +4,7 @@
 
 The goal of `btts` is to create a stronger link between the active user and the 
 source files for a package. Too often I find myself searching through GitHub to 
-find where I loaded a packge from, or in which file a function is defined. Now, 
+find where I loaded a package from, or in which file a function is defined. Now, 
 that information is just a click away.
 
 GitHub has become the de-facto development repository for R packages, so it's 
@@ -15,7 +15,7 @@ In theory this can be extended to BitBucket and others too.
 
 ## Installation
 
-```R devtools::install_github("jonocarroll/btts") ```
+```devtools::install_github("jonocarroll/btts") ```
 
 Note that this package is unable to self-document using this method as it would 
 need to unload itself first.
