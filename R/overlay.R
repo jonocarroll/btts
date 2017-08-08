@@ -1,18 +1,19 @@
 #' @importFrom RCurl getURL
-github_overlay = function(repo, file=NULL) {
+github_overlay <- function(repo, file=NULL) {
   btts:::no_htmlify()
-  stylesheet = paste(readLines(system.file("doc", 'footer_style.css', package = "btts")), collapse = "\n")
-  repolink = paste0('http://github.com/', repo)
+  stylesheet <- paste(readLines(system.file("doc", "footer_style.css",
+                                           package = "btts")), collapse = "\n")
+  repolink <- paste0("http://github.com/", repo)
   if (is.null(file)) {
-    file = repolink
+    file <- repolink
   } else {
-    file = paste0(repolink, '/blob/master/', file)
+    file <- paste0(repolink, "/blob/master/", file)
   }
   # new_issue = URLencode(paste0(repo, '/issues/new?body=', 'Feedback on `', 'SOMENAME', '()`.'))
-  issue <- URLencode(paste0(repolink, '/issues/'))
+  issue <- URLencode(paste0(repolink, "/issues/"))
   # gh_image <- system.file("extdata", 'GitHub-Mark-Light-64px.png', package = "githubtools")
   gh_image <- "figures/GitHub-Mark-Light-64px.png"
-  footer = sprintf('<div style="clear: both;" id="footer">
+  footer <- sprintf('<div style="clear: both;" id="footer">
                       <span id="lift-anchor"><a>^</a></span>
                       <span id="gh-links">
                          <img src="%s">
@@ -23,8 +24,8 @@ github_overlay = function(repo, file=NULL) {
                    </div>', gh_image, file, issue, repolink, repo)
 
                      # </div>', gh_image, repolink, file, issue, repo)
-  
-  return(paste('<style>', stylesheet, '</style>', footer, sep = "\n"))
+
+  return(paste("<style>", stylesheet, "</style>", footer, sep = "\n"))
 
                          # <img src="figures/GitHub-Mark-Light-64px.png">
 }
