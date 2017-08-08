@@ -1,26 +1,24 @@
 #' Install a package with injected HTML in the help file
 #' 
-#' Behaviour is otherwise identical to \code{\link[devtools]{install_github}} 
-#' except that some HTML code is carefully inserted in the roxygen2 header. 
-#' Processing of the roxygen2 code into a .Rd \code{\link[utils]{help}} file is 
-#' also hijacked and HTML sanitisation is deactivated (for that call only). The 
-#' injected HTML (static, not user-changeable for now) overlays a pull-up tab at
-#' the bottom of HTML help files (such as viewed in RStudio) with some context 
-#' of the GitHub package, such as links to the source, issues page, version, and
-#' author.
+#' Behaviour is identical to \code{\link[devtools]{install_github}} except that
+#' some HTML code is carefully inserted in the roxygen2 header. Processing of 
+#' the roxygen2 code into a .Rd \code{\link[utils]{help}} file is also hijacked 
+#' and HTML sanitisation is deactivated (for that call only). The injected HTML 
+#' (static, not user-changeable for now) overlays a pull-up tab at the bottom 
+#' of HTML help files (such as viewed in RStudio) with GitHub links to the 
+#' source, issues page, version, and author.
 #' 
-#' The code for *that* function is linked to in the GitHub repo, meaning you can
-#' see exactly how the function was written, rather than the comment-lacking 
-#' body() from within R.
+#' When viewing the help file for a specific function, the link is to *that* 
+#' function, making it easy to see exactly how the function was written.
 #' 
 #' It is advisable to install the package for the first time using 
 #' `devtools::install_github` so that dependencies are properly met. The 
 #' additional functionality can then be added by re-installing with
 #' `btts::install_github`.
 #' 
-#' @details Warnings \strong{This function has potential to make damaging 
+#' @details Warnings \strong{This function has the potential to make damaging 
 #'   changes to your R library, and should not be executed on production or 
-#'   mission-critical setups.} You are invited to carefully scrutinize the 
+#'   mission-critical setups.} You are encouraged to carefully scrutinize the 
 #'   source code \url{http://github.com/jonocarroll/btts} to ensure that nothing
 #'   malicious is being done here.
 #'   
@@ -36,7 +34,7 @@
 #'   
 #'   The full consequences of changing the default parameters has not been 
 #'   explored. Most of the code for this function calls devtools functions, but 
-#'   there is no guarantee attached to any of it.
+#'   there are no guarantees attached to any of it.
 #'   
 #' @section If something goes wrong: If you do find a bug that causes something 
 #'   to go wrong, please file an Issue on GitHub. Some steps to try and remedy 
@@ -50,7 +48,7 @@
 #'   
 #' @section Acknowledgements: Noam Ross created 
 #'   https://github.com/noamross/htmlhelp which I adapted into this form. This 
-#'   would not have been possible without his first steps.
+#'   would not have been possible without his initial work.
 #'   
 #' @inheritParams devtools::install_github
 #'   
