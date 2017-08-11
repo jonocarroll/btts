@@ -1,6 +1,6 @@
 Package: btts
 Title: We need to go... Back To The Source
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: c(
     person("Jonathan", "Carroll", email = "rpkg@jcarroll.com.au", role = c("aut", "cre")),
     person("Patrick", "Kennedy", role = c("ctb"))
@@ -13,7 +13,8 @@ Depends:
 Imports:
     gtools,
     RCurl,
-    utils
+    utils,
+    devtools
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: TRUE

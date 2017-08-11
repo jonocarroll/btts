@@ -3,6 +3,7 @@
 export(install_github)
 export(install_remote)
 export(install_remotes)
+import(devtools)
 importFrom(RCurl,getURL)
 importFrom(gtools,getDependencies)
 importFrom(utils,URLencode)
