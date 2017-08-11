@@ -28,4 +28,3 @@ body() from within R.
 Noam Ross created \url{https://github.com/noamross/htmlhelp} which I adapted
 into this form. This would not have been possible without his first steps.
 }
-
