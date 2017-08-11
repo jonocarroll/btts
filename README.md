@@ -3,6 +3,7 @@
 ![](man/figures/BTTS.png)
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/btts)](https://cran.r-project.org/package=btts)
+[![Travis-CI Build Status](https://travis-ci.org/jonocarroll/btts.svg?branch=master)](https://travis-ci.org/jonocarroll/btts)
 
 The goal of `btts` is to create a stronger link between the active user and the 
 source files for a package. Too often I find myself searching through GitHub to 
