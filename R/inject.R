@@ -64,18 +64,20 @@
 #' @importFrom gtools getDependencies
 #' @importFrom utils installed.packages
 #' @export
-install_github <- function(repo, username = NULL, ref = "master", subdir = NULL, 
-                           auth_token = devtools:::github_pat(quiet), host = "api.github.com", 
-                           force = TRUE, quiet = FALSE, ...) {
-  
-  ## prevent attempts to remove/re-install a package that btts is itself dependent on
-  ghtDeps <- gtools::getDependencies("btts")
-  reqRepo <- sub(".*/", "", repo)
-  if (reqRepo %in% ghtDeps) stop("Not currently able to remove/re-install a package that btts depends on.")
-  
-  message("Warning: this function has the potential to do damage to your R setup. 
-It interferes with the devtools install process and injects HTML
-into the help files.
+install_github <- function(repo, username = NULL, ref = "master", subdir = NULL,
+                           auth_token = devtools:::github_pat(quiet),
+                           host = "api.github.com", force = TRUE,
+                           quiet = FALSE, ...) {
+
+  # prevent attempts to remove/re-install packages that btts depends on
+  ght_deps <- gtools::getDependencies("btts")
+  req_repo <- sub(".*/", "", repo)
+  if (req_repo %in% ght_deps) stop("Unable to remove/re-install a
+                                   package that btts depends on.")
+
+  message("Warning: this function has the potential to damage your R setup.
+It interferes with the devtools install process and injects HTML into the
+help files.
 
 *** DO NOT USE THIS FUNCTION ON PRODUCTION/MISSION CRITICAL SETUPS ***
 
@@ -83,14 +85,15 @@ Best results are obtained by starting with a fresh R session.
 
 Refer to http://github.com/jonocarroll/btts for further disclaimers.
 ")
-  
-  continueYN <- readline(prompt = "If you are okay with continuing, please type YES and hit Enter.  ")
-  
-  waive_blame <- tolower(continueYN)
+
+  continue_yn <- readline(prompt = "If you would like to continue,
+                         please type YES and hit Enter.")
+
+  waive_blame <- tolower(continue_yn)
   stopifnot(waive_blame == "yes")
-  
-  remotes <- lapply(repo, devtools:::github_remote, username = username, 
-                    ref = ref, subdir = subdir, auth_token = auth_token, 
+
+  remotes <- lapply(repo, devtools:::github_remote, username = username,
+                    ref = ref, subdir = subdir, auth_token = auth_token,
                     host = host)
   if (!isTRUE(force)) {
     # remotes <- Filter(function(x) devtools:::different_sha(x, quiet = quiet),
@@ -108,97 +111,106 @@ install_remotes <- function(remotes, ...) {
 #' @export
 install_remote <- function(remote, ..., quiet=FALSE) {
   ## hijack devtools:::install_remote to inject some HTML into help files
-  
+
   stopifnot(devtools:::is.remote(remote))
-  
-  if (any(grepl(remote$repo, installed.packages()[,1]))) utils::remove.packages(remote$repo)
-  
-  bundle <- devtools:::remote_download(remote, quiet = FALSE) # quiet = FALSE to force re-install
+
+  if (any(grepl(remote$repo, installed.packages()[, 1])))
+      utils::remove.packages(remote$repo)
+
+  bundle <- devtools:::remote_download(remote, quiet = FALSE)
+  # quiet = FALSE to force re-install
   on.exit(unlink(bundle), add = TRUE)
   source <- devtools:::source_pkg(bundle, subdir = remote$subdir)
   on.exit(unlink(source, recursive = TRUE), add = TRUE)
   metadata <- devtools:::remote_metadata(remote, bundle, source)
-  
+
   message("*** INJECTING HTML CODE INTO HELP FILE ***")
   allrfiles <- dir(file.path(source, "R"), full.names = TRUE)
-  
+
   for (ifile in allrfiles) {
-    
+
     # cat(paste0("injecting to ",basename(ifile), "\n"))
-    
-    injection <- paste0("#' \\if{html}{\\Sexpr[stage=render, results=text]{btts:::github_overlay(", 
-                        "'",remote$username,"/",remote$repo,"',",
-                        "'R/",basename(ifile),"')}}")
-    
+
+    injection <- paste0("#' \\if{html}{\\Sexpr[stage=render,
+                        results=text]{btts:::github_overlay(",
+                        "'", remote$username, "/", remote$repo, "',",
+                        "'R/", basename(ifile), "')}}")
+
     rcontent <- file(ifile, "r")
-    
-    allLines <- readLines(rcontent, n = -1)
-    
+
+    all_lines <- readLines(rcontent, n = -1)
+
     ## find roxygen functions
-    ## hooking into @export works if there aren't examples, 
+    ## hooking into @export works if there aren't examples,
     ## otherwise the injection is treated as an example.
-    # returnLines <- which(grepl("#'[ ]+@export", allLines))
+    # return_lines <- which(grepl("#'[ ]+@export", all_lines))
     # STILL FAILS IF AFTER @inheritParams or @import
     ## NEED A BETTER INJECTION POINT
-    roxyBlocks <- which(grepl("^#'", allLines))
-    runs <- split(roxyBlocks, cumsum(seq_along(roxyBlocks) %in% (which(diff(roxyBlocks) > 1) + 1)))
-    # runs = split(seq_along(roxyBlocks), cumsum(c(0, diff(roxyBlocks) > 1)))
+    roxy_blocks <- which(grepl("^#'", all_lines))
+    runs <- split(roxy_blocks, cumsum(seq_along(roxy_blocks) %in%
+                                          (which(diff(roxy_blocks) > 1) + 1)))
+    # runs = split(seq_along(roxy_blocks), cumsum(c(0, diff(roxy_blocks) > 1)))
     # cat(paste0("runs has length ",length(runs)))
     if (length(runs) > 0) {
-      # roxyLines <- lapply(runs, function(x) allLines[roxyBlocks[x]])
-      roxyLines <- lapply(runs, function(x) allLines[x])
+      # roxy_lines <- lapply(runs, function(x) all_lines[roxy_blocks[x]])
+      roxy_lines <- lapply(runs, function(x) all_lines[x])
       for (iblock in seq_along(runs)) {
-        if (length(roxyLines[[iblock]]) > 5) { ## skip over helper files
-          # exampleLine <- which(grepl("^#'[ ]+@examples", roxyLines[[iblock]]))
-          exportLine <- which(grepl("^#'[ ]+@export", roxyLines[[iblock]])) ## check that the fn is exported
-          if (length(exportLine) != 0) {
-              injectLine <- 2 ## just after the one-line title... should be safe(r)
-              allLines[runs[[iblock]][injectLine]] <- paste0("#'\n", injection, "\n#'\n", allLines[runs[[iblock]][injectLine]])
-            # if (length(exampleLine) == 0) {
-            #   injectLine <- exportLine 
-            #   allLines[runs[[iblock]][injectLine]] <- paste0("#'\n#'\n", injection, "\n#'\n", allLines[runs[[iblock]][injectLine]])
-            # # } else if (exportLine < exampleLine) {
-            # #   injectLine <- exportLine
-            # #   allLines[runs[[iblock]][injectLine]] <- paste0("#'\n", injection, "\n#'\n", allLines[runs[[iblock]][injectLine]])
+        if (length(roxy_lines[[iblock]]) > 5) { ## skip over helper files
+          # example_line <- which(grepl("^#'[ ]+@examples", roxy_lines[[iblock]]))
+          export_line <- which(grepl("^#'[ ]+@export", roxy_lines[[iblock]]))
+          ## check that the fn is exported
+          if (length(export_line) != 0) {
+              inject_line <- 2 ## just after the one-line title... should be safe(r)
+              all_lines[runs[[iblock]][inject_line]] <-
+                  paste0("#'\n", injection, "\n#'\n", all_lines[runs[[iblock]][inject_line]])
+            # if (length(example_line) == 0) {
+            #   inject_line <- export_line
+            #   all_lines[runs[[iblock]][inject_line]] <-
+            #   paste0("#'\n#'\n", injection, "\n#'\n", all_lines[runs[[iblock]][inject_line]])
+            # # } else if (export_line < example_line) {
+            # #   inject_line <- export_line
+            # #   all_lines[runs[[iblock]][inject_line]] <-
+            #   paste0("#'\n", injection, "\n#'\n", all_lines[runs[[iblock]][inject_line]])
             # } else {
-            #   injectLine <- min(exampleLine)
-            #   allLines[runs[[iblock]][injectLine]] <- paste0("#'\n#'\n", injection, "\n#'\n", allLines[runs[[iblock]][injectLine]])
+            #   inject_line <- min(example_line)
+            #   all_lines[runs[[iblock]][inject_line]] <-
+            #   paste0("#'\n#'\n", injection, "\n#'\n", all_lines[runs[[iblock]][inject_line]])
             # }
           }
         }
       }
     }
-    # returnLines <- which(grepl("#'[ ]+@export", allLines))
-    
+    # return_lines <- which(grepl("#'[ ]+@export", all_lines))
+
     ## write out the file, but inject the footer code before @export
-    
-    # savedLines <- allLines  
+
+    # saved_lines <- all_lines
     # message(paste0("*** INJECTING HTML CODE INTO ",basename(ifile)," HELP FILE ***"))
-    # allLines[returnLines] <- paste0(allLines[returnLines], "\n\n", injection, "\n\n")
-    # allLines[returnLines] <- paste0("#'\n", injection, "\n#'\n", allLines[returnLines])
-    
-    cat(allLines, file = ifile, sep = "\n")
-    
+    # all_lines[return_lines] <- paste0(all_lines[return_lines], "\n\n", injection, "\n\n")
+    # all_lines[return_lines] <- paste0("#'\n", injection, "\n#'\n", all_lines[return_lines])
+
+    cat(all_lines, file = ifile, sep = "\n")
+
     close(rcontent)
-    
+
   }
-  
+
   # cat(source)
-  
+
   ## add the GitHub logo to the package help
   manfigdir <- file.path(source, "man/figures")
   if (!dir.exists(manfigdir)) dir.create(manfigdir)
-  file.copy(from = system.file("extdata", 'GitHub-Mark-Light-64px.png', package = "btts"),
-            to   = manfigdir)
-  
+  file.copy(from = system.file("extdata", "GitHub-Mark-Light-64px.png",
+                               package = "btts"), to = manfigdir)
+
   message("*** REBUILDING HELP FILES WITH INJECTED CODE ***")
   devtools::document(pkg = source)
   # message("DOCUMENTED.")
-  retCode <- devtools:::install(source, ..., quiet = quiet, metadata = metadata)
-  
+  ret_code <- devtools:::install(source, ..., quiet = quiet, metadata = metadata)
+
   ## re-write the documentation
   # devtools::document(pkg = as.package(remote$repo))
-  
+
   # install(source, ..., quiet = quiet, metadata = metadata)
-  return(invisible(retCode))
+  return(invisible(ret_code))
 }
