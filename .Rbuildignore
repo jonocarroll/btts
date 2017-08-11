@@ -1,3 +1,4 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^btts\.Rproj$
+^\.travis\.yml$
