@@ -1,5 +1,6 @@
 #' @importFrom RCurl getURL
 github_overlay = function(repo, file=NULL) {
+#' @importFrom utils URLencode
   btts:::no_htmlify()
   stylesheet = paste(readLines(system.file("doc", 'footer_style.css', package = "btts")), collapse = "\n")
   repolink = paste0('http://github.com/', repo)
