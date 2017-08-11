@@ -1,6 +1,7 @@
 # This is the secret sauce.  It overrides tools:::htmlify in Rd2HTML so that
 # it doesn't replace characters with HTML escapes.
 # courtesy of @noamross
+#' @importFrom utils packageName
 no_htmlify <- function() {
   my_htmlify <- function(x) return(x)
   R2Hframe <- grep("^Rd2HTML", sapply(sys.calls(), function(a)

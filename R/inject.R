@@ -30,7 +30,7 @@
 #'   session.
 #'   
 #' @section Limitations: This function is not currently able to install GitHub 
-#'   packages that it itself depends on (for now, only gtools and itself). Doing
+#'   packages that it itself depends on (for now, RCurl, gtools, and itself). Doing
 #'   so results in failure to re-load the namespace and that's not good. This of
 #'   course means that it can't self-document with the injected HTML.
 #'   
@@ -62,6 +62,7 @@
 #' } 
 #' 
 #' @importFrom gtools getDependencies
+#' @importFrom utils installed.packages
 #' @export
 install_github <- function(repo, username = NULL, ref = "master", subdir = NULL,
                            auth_token = devtools:::github_pat(quiet),

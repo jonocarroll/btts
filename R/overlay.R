@@ -1,4 +1,5 @@
 #' @importFrom RCurl getURL
+#' @importFrom utils URLencode
 github_overlay <- function(repo, file=NULL) {
   btts:::no_htmlify()
   stylesheet <- paste(readLines(system.file("doc", "footer_style.css",
